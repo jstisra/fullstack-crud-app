@@ -40,4 +40,15 @@ public class ItemController {
         itemRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item newItem) {
+        return itemRepository.findById(id)
+                .map(item -> {
+                    item.setName(newItem.getName());
+                    return ResponseEntity.ok(itemRepository.save(item));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
